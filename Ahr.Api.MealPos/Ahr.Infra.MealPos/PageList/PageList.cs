@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ahr.Infra
+namespace Ahr
 {
     public class PageList<T> : List<T>
     {

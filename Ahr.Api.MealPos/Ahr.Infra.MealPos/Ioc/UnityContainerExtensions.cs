@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Unity;
 
-namespace Ahr.Infra
+namespace Ahr
 {
     public static class UnityContainerExtensions
     {

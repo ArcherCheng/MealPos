@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ahr.Infra
+namespace Ahr
 {
     public static class IServiceCollectionExtensions
     {

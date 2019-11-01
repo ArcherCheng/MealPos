@@ -24,6 +24,7 @@ namespace Ahr.Data.MealPos
         public virtual DbSet<SysTableLog> SysTableLog { get; set; }
         public virtual DbSet<SysUserLog> SysUserLog { get; set; }
         public virtual DbSet<Vender> Vender { get; set; }
+        public virtual DbSet<SysUser> SysUser { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

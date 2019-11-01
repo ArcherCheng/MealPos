@@ -5,8 +5,9 @@ using System.Text;
 
 namespace Ahr.Data.MealPos
 {
-    public partial class Vender : BaseEntity, IBaseEntity, IValidatableObject
+    public partial class SysUser : BaseEntity, IBaseEntity, IValidatableObject
     {
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             throw new NotImplementedException();

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ahr.Infra
+namespace Ahr
 {
     //目前決定先不用 Respository Design Pattern 的模式
     //因為在Service層又要通過這一層(Respository)才能對資料庫存取,太複雜了

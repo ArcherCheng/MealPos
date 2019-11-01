@@ -1,5 +1,4 @@
 ﻿using Ahr.Data.MealPos;
-using Ahr.Infra;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

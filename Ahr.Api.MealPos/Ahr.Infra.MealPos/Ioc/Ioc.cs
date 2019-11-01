@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Text;
 using Unity;
 
-namespace Ahr.Infra
+namespace Ahr
 {
     public class Ioc
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ahr.Infra
+namespace Ahr
 {
     public class BaseDomainEvent
     {

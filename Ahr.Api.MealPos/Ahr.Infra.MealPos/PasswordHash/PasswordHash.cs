@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ahr.Infra.MealPos.PasswordHash
+namespace Ahr
 {
     public class PasswordHash
     {

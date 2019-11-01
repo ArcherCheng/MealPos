@@ -9,8 +9,7 @@ namespace Ahr.Service.MealPos
     {
         public static IServiceCollection AppServiceRegister(this IServiceCollection services)
         {
-            //services.AddScoped<IMemberService, MemberService>();
-            //services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IAuthService, AuthService>();
             return services;
         }
     }
