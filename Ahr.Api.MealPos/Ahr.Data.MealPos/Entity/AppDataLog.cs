@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Ahr.Data.MealPos
 {
-    public partial class SysTableLog
+    public partial class AppDataLog
     {
         public long Id { get; set; }
         public string TableName { get; set; }

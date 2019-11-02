@@ -7,12 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Ahr.Service.MealPos
 {
     public class AuthService : AppBaseService, IAuthService
     {
-        public async Task<bool> ChangePassword(SysUser user, string oldPassword, string newPassword)
+        public async Task<bool> ChangePassword(AppUser user, string oldPassword, string newPassword)
         {
             using (var db = base.NewDb())
             {
@@ -25,8 +26,9 @@ namespace Ahr.Service.MealPos
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
                 user.UpdateTime = System.DateTime.Now;
-                await db.SaveChangesAsync();
-                return true;
+                db.AppUser.Update(user);
+                var saveNumber = await db.SaveChangesAsync();
+                return saveNumber > 0;
             }
         }
 
@@ -42,21 +44,21 @@ namespace Ahr.Service.MealPos
         //    }
         //}
 
-        public async Task<SysUser> GetUser(string email, string phone)
+        public async Task<AppUser> GetUser(string email, string phone)
         {
             using (var db = base.NewDb())
             {
-                var result = await db.SysUser
+                var result = await db.AppUser
                     .FirstOrDefaultAsync(x => x.Email == email && x.Phone == phone);
                 return result;
             }
         }
 
-        public async Task<SysUser> Login(string emailOrPhone, string password)
+        public async Task<AppUser> Login(string emailOrPhone, string password)
         {
             using (var db = base.NewDb())
             {
-                var user = await db.SysUser
+                var user = await db.AppUser
                     .FirstOrDefaultAsync(x => x.Email == emailOrPhone || x.Phone == emailOrPhone);
                 if (user == null)
                     return null;
@@ -65,13 +67,14 @@ namespace Ahr.Service.MealPos
                     return null;
 
                 user.LoginDate = System.DateTime.Now;
-                await db.SaveChangesAsync();
+                db.AppUser.Update(user);
+                var saveNumber = await db.SaveChangesAsync();
 
                 return user;
             }
         }
 
-        public async Task<string> NewPassword(SysUser user)
+        public async Task<string> NewPassword(AppUser user)
         {
             using (var db = base.NewDb())
             {
@@ -83,22 +86,26 @@ namespace Ahr.Service.MealPos
 
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
-                await db.SaveChangesAsync();
+                db.AppUser.Update(user);
+                var saveNumber = await db.SaveChangesAsync();
 
                 return newPassword;
             }
         }
 
-        public async Task<SysUser> Register(SysUser user, string password)
+        public async Task<AppUser> Register(AppUser user, string password)
         {
             byte[] passwordHash, passwordSalt;
             PasswordHash.CreatePasswordHash(password, out passwordHash, out passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
+            user.IsInWork = true;
+            user.LoginDate = System.DateTime.Now;
+            user.UserRole = "users";
             using (var db = base.NewDb())
             {
-                db.SysUser.Add(user);
-                await db.SaveChangesAsync();
+                db.AppUser.Add(user);
+                var saveNumber = await db.SaveChangesAsync();
                 return user;
             }
 
@@ -108,7 +115,7 @@ namespace Ahr.Service.MealPos
         {
             using (var db = base.NewDb())
             {
-                var user = await db.SysUser
+                var user = await db.AppUser
                     .FirstOrDefaultAsync(p => p.Email == userEmail || p.Phone == userPhone);
                 if (user == null)
                     return false;
@@ -116,30 +123,30 @@ namespace Ahr.Service.MealPos
             }
         }
 
-        public string UserLoginToken(SysUser SysUser, string tokenSecretKey)
-        {
-            //var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(tokenSecretKey));
-            //var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+        //public string UserLoginToken(AppUser AppUser, string tokenSecretKey)
+        //{
+        //    var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(tokenSecretKey));
+        //    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
-            //var claims = new[]
-            //{
-            //    new Claim(ClaimTypes.NameIdentifier, SysUser.Id.ToString()),
-            //    new Claim(ClaimTypes.Name,SysUser.UserName),
-            //    new Claim(ClaimTypes.Role,SysUser.UserRole ?? "users" )
-            //};
+        //    var claims = new[]
+        //    {
+        //        new Claim(ClaimTypes.NameIdentifier, AppUser.Id.ToString()),
+        //        new Claim(ClaimTypes.Name,AppUser.UserName),
+        //        new Claim(ClaimTypes.Role,AppUser.UserRole ?? "users" )
+        //    };
 
-            //var tokenDescripter = new SecurityTokenDescriptor
-            //{
-            //    Subject = new ClaimsIdentity(claims),
-            //    Expires = System.DateTime.Now.AddDays(30),
-            //    SigningCredentials = creds
-            //};
+        //    var tokenDescripter = new SecurityTokenDescriptor
+        //    {
+        //        Subject = new ClaimsIdentity(claims),
+        //        Expires = System.DateTime.Now.AddDays(30),
+        //        SigningCredentials = creds
+        //    };
 
-            //var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-            //var token = tokenHandler.CreateToken(tokenDescripter);
-            //var tokenResult = tokenHandler.WriteToken(token);
-            //return tokenResult;
-            return "";
-        }
+        //    var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+        //    var token = tokenHandler.CreateToken(tokenDescripter);
+        //    var tokenResult = tokenHandler.WriteToken(token);
+        //    return tokenResult;
+        //    //return "";
+        //}
     }
 }

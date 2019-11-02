@@ -15,30 +15,127 @@ namespace Ahr.Data.MealPos
         {
         }
 
+        public virtual DbSet<AppDataLog> AppDataLog { get; set; }
+        public virtual DbSet<AppUser> AppUser { get; set; }
+        public virtual DbSet<AppUserLog> AppUserLog { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<Meal> Meal { get; set; }
         public virtual DbSet<MealAddOn> MealAddOn { get; set; }
         public virtual DbSet<OrderDetail> OrderDetail { get; set; }
         public virtual DbSet<OrderMaster> OrderMaster { get; set; }
         public virtual DbSet<SysCode> SysCode { get; set; }
-        public virtual DbSet<SysTableLog> SysTableLog { get; set; }
-        public virtual DbSet<SysUserLog> SysUserLog { get; set; }
         public virtual DbSet<Vender> Vender { get; set; }
-        public virtual DbSet<SysUser> SysUser { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("server=(local)\\sqlexpress;database=MealPos2;trusted_connection=true");
+                optionsBuilder.UseSqlServer("server=.\\sqlExpress;database=MealPos2;trusted_connection=true");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<AppDataLog>(entity =>
+            {
+                entity.Property(e => e.TableName)
+                    .IsRequired()
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.WriteTime)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+            });
+
+            modelBuilder.Entity<AppUser>(entity =>
+            {
+                entity.HasIndex(e => e.Email)
+                    .HasName("AppUser_Idx1")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.Phone)
+                    .HasName("AppUser_Idx2")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.UserName)
+                    .HasName("AppUser_Idx3")
+                    .IsUnique();
+
+                entity.Property(e => e.CreateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.IsInWork)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.LoginDate).HasColumnType("datetime");
+
+                entity.Property(e => e.MainPhotoUrl).HasMaxLength(250);
+
+                entity.Property(e => e.PasswordHash).HasMaxLength(2000);
+
+                entity.Property(e => e.PasswordSalt).HasMaxLength(2000);
+
+                entity.Property(e => e.Phone)
+                    .IsRequired()
+                    .HasMaxLength(15);
+
+                entity.Property(e => e.UpdateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.UserName)
+                    .IsRequired()
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.UserRole).HasMaxLength(15);
+
+                entity.Property(e => e.WriteIp).HasMaxLength(30);
+
+                entity.Property(e => e.WriteUser).HasMaxLength(30);
+            });
+
+            modelBuilder.Entity<AppUserLog>(entity =>
+            {
+                entity.Property(e => e.Destination).HasMaxLength(255);
+
+                entity.Property(e => e.IpAddress).HasMaxLength(30);
+
+                entity.Property(e => e.Method).HasMaxLength(30);
+
+                entity.Property(e => e.QueryString).HasMaxLength(255);
+
+                entity.Property(e => e.Refer).HasMaxLength(255);
+
+                entity.Property(e => e.RequestTime)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.UserId)
+                    .IsRequired()
+                    .HasMaxLength(30);
+            });
+
             modelBuilder.Entity<Customer>(entity =>
             {
+                entity.HasIndex(e => e.MobileNo)
+                    .HasName("Customer_Idx3")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.Name)
+                    .HasName("Customer_Idx1")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.TaxNo)
+                    .HasName("Customer_Idx4")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.TelNo)
+                    .HasName("Customer_Idx2")
+                    .IsUnique();
+
                 entity.Property(e => e.Address).HasMaxLength(60);
 
                 entity.Property(e => e.CreateTime).HasColumnType("datetime");
@@ -67,9 +164,7 @@ namespace Ahr.Data.MealPos
 
                 entity.Property(e => e.WriteIp).HasMaxLength(30);
 
-                entity.Property(e => e.WriteUid)
-                    .HasColumnName("WriteUId")
-                    .HasMaxLength(30);
+                entity.Property(e => e.WriteUser).HasMaxLength(30);
             });
 
             modelBuilder.Entity<Meal>(entity =>
@@ -96,9 +191,7 @@ namespace Ahr.Data.MealPos
 
                 entity.Property(e => e.WriteIp).HasMaxLength(30);
 
-                entity.Property(e => e.WriteUid)
-                    .HasColumnName("WriteUId")
-                    .HasMaxLength(30);
+                entity.Property(e => e.WriteUser).HasMaxLength(30);
             });
 
             modelBuilder.Entity<MealAddOn>(entity =>
@@ -115,9 +208,7 @@ namespace Ahr.Data.MealPos
 
                 entity.Property(e => e.WriteIp).HasMaxLength(30);
 
-                entity.Property(e => e.WriteUid)
-                    .HasColumnName("WriteUId")
-                    .HasMaxLength(30);
+                entity.Property(e => e.WriteUser).HasMaxLength(30);
 
                 entity.HasOne(d => d.Meal)
                     .WithMany(p => p.MealAddOn)
@@ -138,9 +229,7 @@ namespace Ahr.Data.MealPos
 
                 entity.Property(e => e.WriteIp).HasMaxLength(30);
 
-                entity.Property(e => e.WriteUid)
-                    .HasColumnName("WriteUId")
-                    .HasMaxLength(30);
+                entity.Property(e => e.WriteUser).HasMaxLength(30);
 
                 entity.HasOne(d => d.Master)
                     .WithMany(p => p.OrderDetail)
@@ -179,9 +268,7 @@ namespace Ahr.Data.MealPos
 
                 entity.Property(e => e.WriteIp).HasMaxLength(30);
 
-                entity.Property(e => e.WriteUid)
-                    .HasColumnName("WriteUId")
-                    .HasMaxLength(30);
+                entity.Property(e => e.WriteUser).HasMaxLength(30);
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.OrderMaster)
@@ -205,39 +292,7 @@ namespace Ahr.Data.MealPos
 
                 entity.Property(e => e.WriteIp).HasMaxLength(30);
 
-                entity.Property(e => e.WriteUid)
-                    .HasColumnName("WriteUId")
-                    .HasMaxLength(30);
-            });
-
-            modelBuilder.Entity<SysTableLog>(entity =>
-            {
-                entity.Property(e => e.TableName)
-                    .IsRequired()
-                    .HasMaxLength(30);
-
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-            });
-
-            modelBuilder.Entity<SysUserLog>(entity =>
-            {
-                entity.Property(e => e.Destination).HasMaxLength(255);
-
-                entity.Property(e => e.IpAddress).HasMaxLength(30);
-
-                entity.Property(e => e.Method).HasMaxLength(30);
-
-                entity.Property(e => e.QueryString).HasMaxLength(255);
-
-                entity.Property(e => e.Refer).HasMaxLength(255);
-
-                entity.Property(e => e.RequestTime).HasColumnType("datetime");
-
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(30);
+                entity.Property(e => e.WriteUser).HasMaxLength(30);
             });
 
             modelBuilder.Entity<Vender>(entity =>
@@ -272,9 +327,7 @@ namespace Ahr.Data.MealPos
 
                 entity.Property(e => e.WriteIp).HasMaxLength(30);
 
-                entity.Property(e => e.WriteUid)
-                    .HasColumnName("WriteUId")
-                    .HasMaxLength(30);
+                entity.Property(e => e.WriteUser).HasMaxLength(30);
             });
 
             OnModelCreatingPartial(modelBuilder);

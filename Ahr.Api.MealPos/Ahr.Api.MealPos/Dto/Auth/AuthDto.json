@@ -1,0 +1,48 @@
+[
+  {
+    "username": "Xman1",
+    "phone": "9987654111",
+    "email": "a9987654111@gmail.com",
+    "password": "password"
+  },
+  {
+    "username": "Xman2",
+    "phone": "9987654112",
+    "email": "a9987654112@gmail.com",
+    "password": "password"
+  },
+  {
+    "username": "9987654111",
+    "password": "password"
+  },
+  {
+    "username": "9987654112",
+    "password": "password"
+  },
+  {
+    "username": "Xman2",
+    "phone": "9987654112",
+    "email": "a9987654112@gmail.com"
+  },
+  {
+    "phone": "9987654112",
+    "email": "a9987654112@gmail.com",
+    "oldPassword": "656840",
+    "newPassword": "password"
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+]

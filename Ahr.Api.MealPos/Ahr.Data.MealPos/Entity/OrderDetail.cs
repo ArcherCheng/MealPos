@@ -15,7 +15,7 @@ namespace Ahr.Data.MealPos
         public string Notes { get; set; }
         public DateTime? CreateTime { get; set; }
         public DateTime? UpdateTime { get; set; }
-        public string WriteUid { get; set; }
+        public string WriteUser { get; set; }
         public string WriteIp { get; set; }
 
         public virtual OrderMaster Master { get; set; }

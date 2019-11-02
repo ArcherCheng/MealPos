@@ -12,7 +12,7 @@ namespace Ahr
 
         DateTime? UpdateTime { get; set; }
 
-        string WriteUid { get; set; }
+        string WriteUser { get; set; }
 
         string WriteIp { get; set; }
     }
