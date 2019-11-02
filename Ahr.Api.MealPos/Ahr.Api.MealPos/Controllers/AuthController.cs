@@ -30,7 +30,7 @@ namespace Ahr.Api.MealPos.Controllers
         public async Task<IActionResult> Register(RegisterDto model)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState.ValidationState);
+                return BadRequest(ModelState);
 
             if (await _service.UserIsExists(model.Email, model.Phone))
                 return BadRequest("此電子郵件或電話已經是會員了");
@@ -48,7 +48,7 @@ namespace Ahr.Api.MealPos.Controllers
         public async Task<IActionResult> Login(LoginDto model)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState.ValidationState);
+                return BadRequest(ModelState);
 
             var user = await _service.Login(model.Username, model.Password);
             if (user == null)
@@ -97,7 +97,7 @@ namespace Ahr.Api.MealPos.Controllers
         public async Task<IActionResult> ForgetPassword(ForgetPasswordDto model)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState.ValidationState);
+                return BadRequest(ModelState);
 
             var member = await _service.GetUser(model.Email, model.Phone);
             if (member.Email != model.Email || member.Phone != model.Phone || member.UserName != model.UserName)
@@ -112,7 +112,7 @@ namespace Ahr.Api.MealPos.Controllers
         public async Task<IActionResult> ChangePassword(ChangePasswordDto model)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState.ValidationState);
+                return BadRequest(ModelState);
 
             var user = await _service.GetUser(model.Email, model.Phone);
 

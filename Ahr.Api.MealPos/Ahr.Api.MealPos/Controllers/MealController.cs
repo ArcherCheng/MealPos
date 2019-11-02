@@ -2,66 +2,61 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Ahr.Data.MealPos;
 using Ahr.Service.MealPos;
-using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ahr.Api.MealPos.Controllers
 {
-    //[Authorize]
-    public class CustomerController : ApiControllerBase
+    public class MealController : ApiControllerBase
     {
-        private readonly ICustomerService _service;
-        //private readonly IMapper _mapper;
+        private readonly IMealService _service;
 
-        public CustomerController(ICustomerService service)  //, IMapper mapper
+        public MealController(IMealService service)
         {
             this._service = service;
-            //this._mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetList()
         {
-            var customersDto = await _service.CustomerList();
-            return Ok(customersDto);
+            var results = await _service.MealList();
+            return Ok(results);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var customerDto = await _service.GetCustomer(id);
-            return Ok(customerDto);
+            var result = await _service.GetMeal(id);
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]CustomerDto model)
+        public async Task<IActionResult> Create([FromBody]MealDto model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _service.CreateCustomer(model);
+            var result = await _service.CreateMeal(model);
             return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody]CustomerDto model)
+        public async Task<IActionResult> Update(int id, [FromBody]MealDto model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _service.UpdateCustomer(id, model);
+            var result = await _service.UpdateMeal(id, model);
             return Ok(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _service.DeleteCustomer(id);
+            await _service.DeleteMeal(id);
             return Ok(id);
         }
+
     }
 }

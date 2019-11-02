@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Ahr.Api.MealPos
+namespace Ahr.Service.MealPos
 {
     public class LoginDto
     {

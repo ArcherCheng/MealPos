@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Ahr.Service.MealPos
 {
-    public class ParameterBase
+    public class BaseParameter
     {
         private const int MaxPageSize = 100;
 

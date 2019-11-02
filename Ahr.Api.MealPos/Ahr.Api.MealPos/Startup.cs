@@ -99,8 +99,7 @@ namespace Ahr.Api.MealPos
                 .AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .AllowCredentials()
-                );
+                .AllowCredentials());
             app.UseAuthentication();
             app.UseMvc();
         }

@@ -5,9 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Dto\**" />
-    <EmbeddedResource Remove="Dto\**" />
-    <None Remove="Dto\**" />
+    <Content Include="Dto\Auth\AuthDto.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
