@@ -8,9 +8,7 @@ namespace Ahr
     {
         int Id { get; set; }
 
-        DateTime? CreateTime { get; set; }
-
-        DateTime? UpdateTime { get; set; }
+        DateTime? WriteTime { get; set; }
 
         string WriteUser { get; set; }
 

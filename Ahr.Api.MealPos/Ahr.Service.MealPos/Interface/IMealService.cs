@@ -12,5 +12,6 @@ namespace Ahr.Service.MealPos
         Task DeleteMeal(int id);
         Task<MealDto> GetMeal(int id);
         Task<IEnumerable<MealDto>> MealList();
+        Task<IEnumerable<MealAddOnDto>> MealAddOnList();
     }
 }

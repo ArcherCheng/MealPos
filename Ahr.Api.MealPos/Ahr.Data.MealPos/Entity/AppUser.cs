@@ -15,8 +15,7 @@ namespace Ahr.Data.MealPos
         public string UserRole { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
-        public DateTime? CreateTime { get; set; }
-        public DateTime? UpdateTime { get; set; }
+        public DateTime? WriteTime { get; set; }
         public string WriteUser { get; set; }
         public string WriteIp { get; set; }
     }

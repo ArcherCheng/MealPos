@@ -11,10 +11,9 @@ namespace Ahr.Data.MealPos
         public int? MealAddOnId { get; set; }
         public int Qty { get; set; }
         public int Price { get; set; }
-        public int Total { get; set; }
+        public int TotalAmt { get; set; }
         public string Notes { get; set; }
-        public DateTime? CreateTime { get; set; }
-        public DateTime? UpdateTime { get; set; }
+        public DateTime? WriteTime { get; set; }
         public string WriteUser { get; set; }
         public string WriteIp { get; set; }
 

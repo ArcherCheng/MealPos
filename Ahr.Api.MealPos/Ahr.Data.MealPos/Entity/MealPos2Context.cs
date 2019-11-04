@@ -16,15 +16,15 @@ namespace Ahr.Data.MealPos
         }
 
         public virtual DbSet<AppDataLog> AppDataLog { get; set; }
+        public virtual DbSet<AppKeyValue> AppKeyValue { get; set; }
         public virtual DbSet<AppUser> AppUser { get; set; }
         public virtual DbSet<AppUserLog> AppUserLog { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<Meal> Meal { get; set; }
         public virtual DbSet<MealAddOn> MealAddOn { get; set; }
+        public virtual DbSet<MealAddOnRela> MealAddOnRela { get; set; }
         public virtual DbSet<OrderDetail> OrderDetail { get; set; }
         public virtual DbSet<OrderMaster> OrderMaster { get; set; }
-        public virtual DbSet<SysCode> SysCode { get; set; }
-        public virtual DbSet<Vender> Vender { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -48,6 +48,23 @@ namespace Ahr.Data.MealPos
                     .HasDefaultValueSql("(getdate())");
             });
 
+            modelBuilder.Entity<AppKeyValue>(entity =>
+            {
+                entity.Property(e => e.KeyGroup)
+                    .IsRequired()
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.KeyValue)
+                    .IsRequired()
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.WriteIp).HasMaxLength(30);
+
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
+
+                entity.Property(e => e.WriteUser).HasMaxLength(30);
+            });
+
             modelBuilder.Entity<AppUser>(entity =>
             {
                 entity.HasIndex(e => e.Email)
@@ -61,8 +78,6 @@ namespace Ahr.Data.MealPos
                 entity.HasIndex(e => e.UserName)
                     .HasName("AppUser_Idx3")
                     .IsUnique();
-
-                entity.Property(e => e.CreateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.Email)
                     .IsRequired()
@@ -84,8 +99,6 @@ namespace Ahr.Data.MealPos
                     .IsRequired()
                     .HasMaxLength(15);
 
-                entity.Property(e => e.UpdateTime).HasColumnType("datetime");
-
                 entity.Property(e => e.UserName)
                     .IsRequired()
                     .HasMaxLength(30);
@@ -93,6 +106,8 @@ namespace Ahr.Data.MealPos
                 entity.Property(e => e.UserRole).HasMaxLength(15);
 
                 entity.Property(e => e.WriteIp).HasMaxLength(30);
+
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
 
                 entity.Property(e => e.WriteUser).HasMaxLength(30);
             });
@@ -121,24 +136,20 @@ namespace Ahr.Data.MealPos
             modelBuilder.Entity<Customer>(entity =>
             {
                 entity.HasIndex(e => e.MobileNo)
-                    .HasName("Customer_Idx3")
-                    .IsUnique();
+                    .HasName("Customer_Idx3");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("Customer_Idx1")
-                    .IsUnique();
+                    .HasName("Customer_Idx1");
 
-                entity.HasIndex(e => e.TaxNo)
-                    .HasName("Customer_Idx4")
-                    .IsUnique();
+                entity.HasIndex(e => e.TaxId)
+                    .HasName("Customer_Idx4");
 
                 entity.HasIndex(e => e.TelNo)
-                    .HasName("Customer_Idx2")
-                    .IsUnique();
+                    .HasName("Customer_Idx2");
 
                 entity.Property(e => e.Address).HasMaxLength(60);
 
-                entity.Property(e => e.CreateTime).HasColumnType("datetime");
+                entity.Property(e => e.Contactor).HasMaxLength(30);
 
                 entity.Property(e => e.EngName).HasMaxLength(60);
 
@@ -152,17 +163,15 @@ namespace Ahr.Data.MealPos
 
                 entity.Property(e => e.Notes).HasMaxLength(500);
 
-                entity.Property(e => e.Operator).HasMaxLength(30);
-
                 entity.Property(e => e.PostNo).HasMaxLength(6);
 
-                entity.Property(e => e.TaxNo).HasMaxLength(30);
+                entity.Property(e => e.TaxId).HasMaxLength(30);
 
                 entity.Property(e => e.TelNo).HasMaxLength(30);
 
-                entity.Property(e => e.UpdateTime).HasColumnType("datetime");
-
                 entity.Property(e => e.WriteIp).HasMaxLength(30);
+
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
 
                 entity.Property(e => e.WriteUser).HasMaxLength(30);
             });
@@ -171,63 +180,73 @@ namespace Ahr.Data.MealPos
             {
                 entity.Property(e => e.BarCode).HasMaxLength(30);
 
-                entity.Property(e => e.Category)
-                    .IsRequired()
-                    .HasMaxLength(30);
-
-                entity.Property(e => e.CreateTime).HasColumnType("datetime");
-
                 entity.Property(e => e.MealName)
                     .IsRequired()
                     .HasMaxLength(60);
+
+                entity.Property(e => e.MealType)
+                    .IsRequired()
+                    .HasMaxLength(30);
 
                 entity.Property(e => e.Notes).HasMaxLength(500);
 
                 entity.Property(e => e.Unit)
                     .IsRequired()
-                    .HasMaxLength(30);
-
-                entity.Property(e => e.UpdateTime).HasColumnType("datetime");
+                    .HasMaxLength(15);
 
                 entity.Property(e => e.WriteIp).HasMaxLength(30);
+
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
 
                 entity.Property(e => e.WriteUser).HasMaxLength(30);
             });
 
             modelBuilder.Entity<MealAddOn>(entity =>
             {
-                entity.Property(e => e.CreateTime).HasColumnType("datetime");
+                entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.Property(e => e.Descriptions)
+                entity.Property(e => e.AddOnName)
                     .IsRequired()
-                    .HasMaxLength(60);
-
-                entity.Property(e => e.Notes).HasMaxLength(500);
-
-                entity.Property(e => e.UpdateTime).HasColumnType("datetime");
+                    .HasMaxLength(15);
 
                 entity.Property(e => e.WriteIp).HasMaxLength(30);
 
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
+
+                entity.Property(e => e.WriteUser).HasMaxLength(30);
+            });
+
+            modelBuilder.Entity<MealAddOnRela>(entity =>
+            {
+                entity.HasKey(e => new { e.MealId, e.AddOnId })
+                    .HasName("MealAddOnRela_Pkey");
+
+                entity.Property(e => e.WriteIp).HasMaxLength(30);
+
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
+
                 entity.Property(e => e.WriteUser).HasMaxLength(30);
 
+                entity.HasOne(d => d.AddOn)
+                    .WithMany(p => p.MealAddOnRela)
+                    .HasForeignKey(d => d.AddOnId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("MealAddOnRela_AddOnId");
+
                 entity.HasOne(d => d.Meal)
-                    .WithMany(p => p.MealAddOn)
+                    .WithMany(p => p.MealAddOnRela)
                     .HasForeignKey(d => d.MealId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("MealAddOn_MealId");
+                    .HasConstraintName("MealAddOnRela_MealId");
             });
 
             modelBuilder.Entity<OrderDetail>(entity =>
             {
-                entity.Property(e => e.CreateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.Notes)
-                    .IsRequired()
-                    .HasMaxLength(500);
-
-                entity.Property(e => e.UpdateTime).HasColumnType("datetime");
+                entity.Property(e => e.Notes).HasMaxLength(500);
 
                 entity.Property(e => e.WriteIp).HasMaxLength(30);
+
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
 
                 entity.Property(e => e.WriteUser).HasMaxLength(30);
 
@@ -246,17 +265,11 @@ namespace Ahr.Data.MealPos
 
             modelBuilder.Entity<OrderMaster>(entity =>
             {
-                entity.Property(e => e.CreateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.CustomerTaxNo).HasMaxLength(30);
-
                 entity.Property(e => e.InvoiceNo).HasMaxLength(30);
 
                 entity.Property(e => e.Notes).HasMaxLength(500);
 
-                entity.Property(e => e.Operator).HasMaxLength(30);
-
-                entity.Property(e => e.OrderDate).HasColumnType("datetime");
+                entity.Property(e => e.OrderDate).HasColumnType("date");
 
                 entity.Property(e => e.OrderType)
                     .IsRequired()
@@ -264,9 +277,11 @@ namespace Ahr.Data.MealPos
 
                 entity.Property(e => e.SeatNo).HasMaxLength(30);
 
-                entity.Property(e => e.UpdateTime).HasColumnType("datetime");
+                entity.Property(e => e.TaxId).HasMaxLength(30);
 
                 entity.Property(e => e.WriteIp).HasMaxLength(30);
+
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
 
                 entity.Property(e => e.WriteUser).HasMaxLength(30);
 
@@ -274,60 +289,6 @@ namespace Ahr.Data.MealPos
                     .WithMany(p => p.OrderMaster)
                     .HasForeignKey(d => d.CustomerId)
                     .HasConstraintName("OrderMaster_CustomerId");
-            });
-
-            modelBuilder.Entity<SysCode>(entity =>
-            {
-                entity.Property(e => e.CodeGroup)
-                    .IsRequired()
-                    .HasMaxLength(30);
-
-                entity.Property(e => e.CodeValue)
-                    .IsRequired()
-                    .HasMaxLength(30);
-
-                entity.Property(e => e.CreateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.UpdateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.WriteIp).HasMaxLength(30);
-
-                entity.Property(e => e.WriteUser).HasMaxLength(30);
-            });
-
-            modelBuilder.Entity<Vender>(entity =>
-            {
-                entity.Property(e => e.Address).HasMaxLength(60);
-
-                entity.Property(e => e.CreateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.EngName).HasMaxLength(120);
-
-                entity.Property(e => e.FaxNo).HasMaxLength(30);
-
-                entity.Property(e => e.MobileNo).HasMaxLength(30);
-
-                entity.Property(e => e.Notes)
-                    .IsRequired()
-                    .HasMaxLength(500);
-
-                entity.Property(e => e.Operator).HasMaxLength(30);
-
-                entity.Property(e => e.PostNo).HasMaxLength(6);
-
-                entity.Property(e => e.TaxId).HasMaxLength(10);
-
-                entity.Property(e => e.TelNo).HasMaxLength(30);
-
-                entity.Property(e => e.UpdateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.VenderName)
-                    .IsRequired()
-                    .HasMaxLength(60);
-
-                entity.Property(e => e.WriteIp).HasMaxLength(30);
-
-                entity.Property(e => e.WriteUser).HasMaxLength(30);
             });
 
             OnModelCreatingPartial(modelBuilder);

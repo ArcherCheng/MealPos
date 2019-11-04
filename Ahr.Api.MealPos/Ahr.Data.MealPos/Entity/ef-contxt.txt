@@ -1,0 +1,2 @@
+dotnet ef dbcontext scaffold "server=.\sqlExpress;database=MealPos2;trusted_connection=true" Microsoft.Entityfra
+meworkcore.sqlserver -f

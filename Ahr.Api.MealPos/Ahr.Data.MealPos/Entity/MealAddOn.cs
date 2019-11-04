@@ -5,16 +5,18 @@ namespace Ahr.Data.MealPos
 {
     public partial class MealAddOn
     {
+        public MealAddOn()
+        {
+            MealAddOnRela = new HashSet<MealAddOnRela>();
+        }
+
         public int Id { get; set; }
-        public int MealId { get; set; }
-        public string Descriptions { get; set; }
+        public string AddOnName { get; set; }
         public int AddPrice { get; set; }
-        public string Notes { get; set; }
-        public DateTime? CreateTime { get; set; }
-        public DateTime? UpdateTime { get; set; }
+        public DateTime? WriteTime { get; set; }
         public string WriteUser { get; set; }
         public string WriteIp { get; set; }
 
-        public virtual Meal Meal { get; set; }
+        public virtual ICollection<MealAddOnRela> MealAddOnRela { get; set; }
     }
 }

@@ -1,0 +1,29 @@
+﻿{
+    "id": 1,
+    "mealName": "雞腿飯",
+    "mealType": "飯類",
+    "unit": "份",
+    "barCode": null,
+    "cost": 60,
+    "brandPrice": 90,
+    "salePrice": 80,
+    "cookMinutes": 10,
+    "notes": null,
+    "mealAddOnDtos": [
+        {
+               "id": 3,
+                "addOnName": "加飯",
+                "addPrice": 10
+        },
+        {
+                "id": 4,
+                "addOnName": "加菜",
+                "addPrice": 10
+        },
+		{
+               "id": 5,
+                "addOnName": "加肉",
+                "addPrice": 20
+		}
+    ]
+}

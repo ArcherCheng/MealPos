@@ -25,7 +25,7 @@ namespace Ahr.Service.MealPos
                 PasswordHash.CreatePasswordHash(newPassword, out passwordHash, out passwordSalt);
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
-                user.UpdateTime = System.DateTime.Now;
+                user.WriteTime = System.DateTime.Now;
                 db.AppUser.Update(user);
                 var saveNumber = await db.SaveChangesAsync();
                 return saveNumber > 0;

@@ -11,6 +11,8 @@ namespace Ahr.Service.MealPos
         {
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IMealService, MealService>();
+            services.AddScoped<IOrderService, OrderService>();
             return services;
         }
     }
