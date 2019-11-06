@@ -26,17 +26,6 @@ namespace Ahr.Service.MealPos
                 order.OrderNo = no;
                 order.CookStatus = 0;
 
-                //var orderAmt = order.OrderDetail
-                //               .Select(a => a.Qty * (a.Price + a.AddPrice))
-                //               .Sum();
-                //order.OrderAmt = orderAmt;
-                //if (order.TaxType == 0)
-                //    order.TaxRate = 0;
-                //else
-                //    order.TaxRate = 5;
-                //order.TaxAmt = order.OrderAmt * order.TaxRate / 100;
-                //order.TotalAmt = order.OrderAmt + order.TaxAmt;
-
                 order.CaculateOrderAmt();
 
                 db.OrderMaster.Add(order);
@@ -112,40 +101,40 @@ namespace Ahr.Service.MealPos
         {
             using(var db = NewDb())
             {
-                //using(var transaction = db.Database.BeginTransaction())
-                //{
-                    var orderDetail = await db.OrderDetail
-                        .Where(x => x.MasterId == orderId)
+                using (var transaction = db.Database.BeginTransaction())
+                {
+                    var idList = model.orderDetailDtos.Select(x => x.Id).ToList();
+
+                    var deleteDetails = await db.OrderDetail
+                        .Where(x => x.MasterId == orderId && !idList.Contains(x.Id))
                         .ToListAsync();
 
-                    var idList = model.orderDetailDtos.Select(x => x.Id.ToString()).ToArray();
-
-                    db.Database.ExecuteSqlCommand("Delete OrderDetail Where MasterId={0} and Id Not in({1})", orderId, String.Join(",", idList));
+                    db.OrderDetail.RemoveRange(deleteDetails);
                     await db.SaveChangesAsync();
+
+                    //db.Database.ExecuteSqlCommand("Delete OrderDetail Where MasterId={0} and Id Not in({1})", orderId, String.Join(",", idList));
 
                     //_mapper.Map<IEnumerable<OrderDetailDto>,IEnumerable<OrderDetail>>(orderDetailDto, orderDetail);
 
                     //db.OrderDetail.UpdateRange(orderDetail);
 
-                    orderDetail = await db.OrderDetail
-                        .Where(x => x.MasterId == orderId)
-                        .ToListAsync();
+                    //orderDetail = await db.OrderDetail
+                    //    .Where(x => x.MasterId == orderId)
+                    //    .ToListAsync();
 
-                    //var order = await db.OrderMaster
-                    //    //.Include(x => x.OrderDetail)
-                    //    .FirstAsync(x => x.Id == id);
+                    var order = await db.OrderMaster
+                        .Include(x => x.OrderDetail)
+                        .FirstAsync(x => x.Id == orderId);
 
+                    _mapper.Map<OrderDto, OrderMaster>(model, order);
 
-                    //_mapper.Map<OrderDto, OrderMaster>(model, order);
-
-
-                    //order.CaculateOrderAmt();
-                    ////db.OrderDetail.UpdateRange(order.OrderDetail);
-                    //db.OrderMaster.Update(order);
-                    //await db.SaveChangesAsync();
-                    //transaction.Commit();
+                    order.CaculateOrderAmt();
+                    //////db.OrderDetail.UpdateRange(order.OrderDetail);
+                    db.OrderMaster.Update(order);
+                    await db.SaveChangesAsync();
+                    transaction.Commit();
                     return await GetOrder(orderId);
-                //}
+                }
 
             }
         }

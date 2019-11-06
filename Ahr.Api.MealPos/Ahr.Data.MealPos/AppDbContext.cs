@@ -1,11 +1,18 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 
 namespace Ahr.Data.MealPos
 {
     public partial class AppDbContext : DbContext
     {
+        //public static readonly ILoggerFactory loggerFactory = new LoggerFactory().AddConsole((_, ___) => true);
+
+        public static readonly ILoggerFactory loggerFactory =
+            new LoggerFactory(new[] { new ConsoleLoggerProvider((_, __) => true, true) });
+
         public AppDbContext()
         {
         }
@@ -13,6 +20,17 @@ namespace Ahr.Data.MealPos
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+               optionsBuilder
+                    .UseLoggerFactory(loggerFactory)  //tie-up DbContext with LoggerFactory object
+                    .EnableSensitiveDataLogging()
+                    .UseSqlServer("server=.\\sqlExpress;database=MealPos2;trusted_connection=true");
+            }
         }
 
         public virtual DbSet<AppDataLog> AppDataLog { get; set; }
@@ -25,15 +43,6 @@ namespace Ahr.Data.MealPos
         public virtual DbSet<MealAddOnRela> MealAddOnRela { get; set; }
         public virtual DbSet<OrderDetail> OrderDetail { get; set; }
         public virtual DbSet<OrderMaster> OrderMaster { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("server=.\\sqlExpress;database=MealPos2;trusted_connection=true");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

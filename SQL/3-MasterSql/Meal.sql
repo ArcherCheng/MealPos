@@ -18,8 +18,8 @@
 	WriteIp       nvarchar(30) NULL,
 CONSTRAINT Meal_Pkey PRIMARY KEY CLUSTERED (Id));
 go
-Create unique index Meal_Idx1 on Meal (MealName asc) WHERE MealName is not null ;
-
+Create unique index Meal_uIdx1 on Meal (MealName asc) WHERE MealName is not null ;
+go
 
 Create Trigger Meal_Trigger1 On Meal After Insert,Update,Delete Not For Replication As
 Begin
@@ -176,6 +176,15 @@ insert into mealaddonRela(mealId,AddOnid)
 values(2,1)
 insert into mealaddonRela(mealId,AddOnid)
 values(2,2)
+insert into mealaddonRela(mealId,AddOnid)
+values(2,3)
+insert into mealaddonRela(mealId,AddOnid)
+values(3,3)
+insert into mealaddonRela(mealId,AddOnid)
+values(3,4)
+insert into mealaddonRela(mealId,AddOnid)
+values(3,5)
+
 
 
 select * from meal
