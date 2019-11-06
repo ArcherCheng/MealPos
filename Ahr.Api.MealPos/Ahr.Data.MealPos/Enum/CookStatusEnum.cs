@@ -4,9 +4,10 @@ using System.Text;
 
 namespace Ahr.Data.MealPos
 {
-    public enum TaxTypeEnum
+    public enum CookStatusEnum
     {
-        免稅=0,
-        應稅
+        準備中 = 0,
+        烹調中,
+        烹調完成
     }
 }

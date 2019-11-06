@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -26,10 +26,6 @@
     <ProjectReference Include="..\Ahr.Data.MealPos\Ahr.Data.MealPos.csproj" />
     <ProjectReference Include="..\Ahr.Infra.MealPos\Ahr.Infra.MealPos.csproj" />
     <ProjectReference Include="..\Ahr.Service.MealPos\Ahr.Service.MealPos.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Entity\" />
   </ItemGroup>
 
 </Project>

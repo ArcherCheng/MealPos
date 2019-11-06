@@ -15,8 +15,6 @@ namespace Ahr.Service.MealPos
             CreateMap<RegisterDto, AppUser>();
             CreateMap<AppUser, UserToReturnDto>();
 
-            //CreateMap<Customer, CustomerDto>()
-            //    .ForMember(dest => dest.Id, opt => opt.Ignore());
             CreateMap<CustomerDto, Customer>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ReverseMap();
@@ -27,19 +25,22 @@ namespace Ahr.Service.MealPos
             //new MealAddOnDto { Id = mr.AddOnId, AddOnName = mr.AddOn.AddOnName, AddPrice = mr.AddOn.AddPrice }
 
             CreateMap<MealDto, Meal>()
-                .ForMember(dest => dest.MealAddOnRela, opt => opt.MapFrom(src => src.MealAddOnDtos))
+                ///map 的方法一
+                .ForMember(dest => dest.MealAddOnRela, opt => opt.MapFrom(src => src.MealAddOnDtos.Select(x=>new MealAddOnRela{ AddOnId = x.Id})))
                 .ForMember(dest => dest.Id, opt => opt.Ignore());
 
             CreateMap<MealAddOn, MealAddOnDto>()
                 .ReverseMap();
 
             CreateMap<OrderMaster, OrderDto>()
-                .ForMember(dest => dest.orderDetailDtos, opt => opt.MapFrom(src => src.OrderDetail))
-                .ReverseMap()
-                .ForMember(dest => dest.Id, opt => opt.Ignore());
+                .ForMember(dest => dest.orderDetailDtos, opt => opt.MapFrom(src => src.OrderDetail));
 
             CreateMap<OrderDetail, OrderDetailDto>()
                 .ReverseMap();
+
+            CreateMap<OrderDto, OrderMaster>()
+                .ForMember(dest => dest.OrderDetail, opt => opt.MapFrom(scr => scr.orderDetailDtos));
+                //.ForMember(dest => dest.Id, opt => opt.Ignore());
 
         }
     }

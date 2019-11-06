@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Ahr.Service.MealPos
 {
-    public class AppBaseService : BaseService, IBaseService
+    public class AppBaseService : BaseService, IAppBaseService
     {
         protected AppDbContext NewDb()
         {
@@ -98,6 +98,18 @@ namespace Ahr.Service.MealPos
             using (var db = new AppDbContext())
             {
                 var result = await db.Set<T>().ToListAsync();
+                return result;
+            }
+        }
+
+        public async Task<IEnumerable<string>> GetAppKeyValue(string keyGroup)
+        {
+            using (var db = new AppDbContext())
+            {
+                var result = await db.AppKeyValue
+                    .Where(x => x.KeyGroup.ToUpper() == keyGroup.ToUpper())
+                    .Select(x => x.KeyValue)
+                    .ToListAsync();
                 return result;
             }
         }

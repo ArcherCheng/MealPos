@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Ahr.Data.MealPos
 {
@@ -14,10 +15,10 @@ namespace Ahr.Data.MealPos
         public int? CustomerId { get; set; }
         public string OrderType { get; set; }
         public DateTime OrderDate { get; set; }
-        public int? OrderNo { get; set; }
+        public int OrderNo { get; set; }
         public string SeatNo { get; set; }
-        public int TaxType { get; set; }
         public int OrderAmt { get; set; }
+        public int TaxType { get; set; }
         public int TaxRate { get; set; }
         public int TaxAmt { get; set; }
         public int TotalAmt { get; set; }
@@ -31,5 +32,20 @@ namespace Ahr.Data.MealPos
 
         public virtual Customer Customer { get; set; }
         public virtual ICollection<OrderDetail> OrderDetail { get; set; }
+
+        public void CaculateOrderAmt()
+        {
+            var orderAmt = this.OrderDetail
+                           .Select(a => a.Qty * (a.Price + a.AddPrice))
+                           .Sum();
+            this.OrderAmt = orderAmt;
+            if (this.TaxType == 0)
+                this.TaxRate = 0;
+            else
+                this.TaxRate = 5;
+
+            this.TaxAmt = this.OrderAmt * this.TaxRate / 100;
+            this.TotalAmt = this.OrderAmt - this.TaxAmt;
+        }
     }
 }

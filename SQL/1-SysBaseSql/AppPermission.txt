@@ -1,0 +1,41 @@
+Drop table AppPermission
+go
+create table AppPermission
+(
+	Id            int identity(1,1)   not null,
+	PermissionId  nvarchar(120)  not null, --程式編號 area-controller-action 
+	HttpAction    nvarchar(15)   null, --get,post,put,delete 
+	Description   nvarbinary(60)   null,
+
+    WriteTime     Datetime       Null,
+	WriteUser     Nvarchar(30)   Null,  
+	WriteIp       Nvarchar(30)   Null, 
+	constraint AppPermission_Pkey primary key (Id) 
+);
+Go
+
+
+create trigger AppPermission_trigger1 on AppPermission after insert,update,delete not for replication as
+begin
+	Declare @TableName Nvarchar(30);
+	Set @TableName='AppPermission';
+
+	Declare @WriteType Tinyint;
+	Set @WriteType=0;
+ 
+	If Exists(Select 1 From Inserted) And Not Exists(Select 1 From Deleted)
+		Set @WriteType = 1;    --Insert
+	Else If Exists(Select 1 From Inserted) And Exists(Select 1 From Deleted)
+		Set @WriteType = 2;    --Update
+	Else If Not Exists(Select 1 From Inserted) And Exists(Select 1 From Deleted)
+		Set @WriteType = 3;    --Delete
+	
+	Declare @InsertData Nvarchar(max);
+	Declare @DeleteData Nvarchar(max);
+
+	Set @InsertData=(Select * From Inserted For Json Auto);
+	Set @DeleteData=(Select * From Deleted For Json Auto);
+
+	Insert Into AppDataLog(TableName,InsertData,DeleteData,WriteType) Values(@TableName,@InsertData,@DeleteData,@WriteType);
+end
+go

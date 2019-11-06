@@ -242,8 +242,6 @@ namespace Ahr.Data.MealPos
 
             modelBuilder.Entity<OrderDetail>(entity =>
             {
-                entity.Property(e => e.Notes).HasMaxLength(500);
-
                 entity.Property(e => e.WriteIp).HasMaxLength(30);
 
                 entity.Property(e => e.WriteTime).HasColumnType("datetime");
