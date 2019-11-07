@@ -103,37 +103,99 @@ namespace Ahr.Service.MealPos
             {
                 using (var transaction = db.Database.BeginTransaction())
                 {
-                    var idList = model.orderDetailDtos.Select(x => x.Id).ToList();
+                    //方法一
+                    var newIdList = model.orderDetailDtos.Select(x => x.Id).ToList();
+                    var oldIdList = db.OrderDetail.Where(x=>x.MasterId == orderId).Select(x => x.Id).ToList();
 
                     var deleteDetails = await db.OrderDetail
-                        .Where(x => x.MasterId == orderId && !idList.Contains(x.Id))
+                        .Where(x => x.MasterId == orderId && !newIdList.Contains(x.Id))
                         .ToListAsync();
+                    if (deleteDetails.Count > 0)
+                        db.OrderDetail.RemoveRange(deleteDetails);
 
-                    db.OrderDetail.RemoveRange(deleteDetails);
+                    var dtos = model.orderDetailDtos
+                        .Where(x => oldIdList.Contains(x.Id))
+                        .ToList();
+                    if (dtos.Count > 0)
+                    {
+                        var updateDetails = _mapper.Map<IEnumerable<OrderDetailDto>, IEnumerable<OrderDetail>>(dtos);
+                        db.OrderDetail.UpdateRange(updateDetails);
+                    }
+
+                    dtos = model.orderDetailDtos.Where(x => x.Id == 0).ToList();
+                    if (dtos.Count > 0)
+                    {
+                        var insertDetails = _mapper.Map<IEnumerable<OrderDetailDto>, IEnumerable<OrderDetail>>(dtos);
+                        db.OrderDetail.AddRange(insertDetails);
+                    }
+
                     await db.SaveChangesAsync();
-
-                    //db.Database.ExecuteSqlCommand("Delete OrderDetail Where MasterId={0} and Id Not in({1})", orderId, String.Join(",", idList));
-
-                    //_mapper.Map<IEnumerable<OrderDetailDto>,IEnumerable<OrderDetail>>(orderDetailDto, orderDetail);
-
-                    //db.OrderDetail.UpdateRange(orderDetail);
-
-                    //orderDetail = await db.OrderDetail
-                    //    .Where(x => x.MasterId == orderId)
-                    //    .ToListAsync();
 
                     var order = await db.OrderMaster
                         .Include(x => x.OrderDetail)
                         .FirstAsync(x => x.Id == orderId);
-
-                    _mapper.Map<OrderDto, OrderMaster>(model, order);
-
                     order.CaculateOrderAmt();
-                    //////db.OrderDetail.UpdateRange(order.OrderDetail);
-                    db.OrderMaster.Update(order);
                     await db.SaveChangesAsync();
+
                     transaction.Commit();
                     return await GetOrder(orderId);
+
+
+                    ////// 方法二
+                    //var newIdList = model.orderDetailDtos.Select(x => x.Id).ToList();
+                    //var orderDetails = db.OrderDetail.Where(x => x.MasterId == orderId);
+                    //foreach (var od in orderDetails)
+                    //{
+                    //    if (newIdList.Contains(od.Id))
+                    //    {
+                    //        var dto = model.orderDetailDtos.FirstOrDefault(x => x.Id == od.Id);
+                    //        _mapper.Map<OrderDetailDto, OrderDetail>(dto,od);
+                    //        db.OrderDetail.Update(od);
+                    //    }
+                    //    else  //if (!newIdList.Contains(od.Id))
+                    //    {
+                    //        db.OrderDetail.Remove(od);
+                    //    }
+                    //}
+                    //foreach (var dto in model.orderDetailDtos)
+                    //{
+                    //    if (dto.Id == 0)
+                    //    {
+                    //        var insertDetail = _mapper.Map<OrderDetailDto, OrderDetail>(dto);
+                    //        db.OrderDetail.Add(insertDetail);
+                    //    }
+                    //}
+                    //await db.SaveChangesAsync();
+
+                    //var order = await db.OrderMaster
+                    //    .Include(x => x.OrderDetail)
+                    //    .FirstAsync(x => x.Id == orderId);
+                    //order.CaculateOrderAmt();
+                    //await db.SaveChangesAsync();
+
+                    //transaction.Commit();
+                    //return await GetOrder(orderId);
+
+
+                    ////方法三
+                    ////全部刪除
+                    //var orderDetails = db.OrderDetail.Where(x => x.MasterId == orderId);
+                    //db.OrderDetail.RemoveRange(orderDetails);
+                    ////全部新增
+                    //var insertDetails = _mapper.Map<IEnumerable<OrderDetailDto>, IEnumerable<OrderDetail>>(model.orderDetailDtos);
+                    //db.OrderDetail.AddRange(insertDetails);
+                    ////存檔
+                    //await db.SaveChangesAsync();
+                    ////重新計算訂單主檔金額及稅額
+                    //var order = await db.OrderMaster
+                    //    .Include(x => x.OrderDetail)
+                    //    .FirstAsync(x => x.Id == orderId);
+                    //order.CaculateOrderAmt();
+                    ////存檔
+                    //await db.SaveChangesAsync();
+
+                    //transaction.Commit();
+                    //return await GetOrder(orderId);
                 }
 
             }

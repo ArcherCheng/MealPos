@@ -37,6 +37,7 @@ namespace Ahr.Service.MealPos
 
             CreateMap<OrderDetail, OrderDetailDto>()
                 .ReverseMap();
+                //.ForMember(dest => dest.Id, opt => opt.Ignore());
 
             CreateMap<OrderDto, OrderMaster>()
                 .ForMember(dest => dest.OrderDetail, opt => opt.MapFrom(scr => scr.orderDetailDtos));

@@ -116,3 +116,69 @@
 
 
 
+{
+    "id": 50,   
+    "customerId": 3,
+    "invoiceNo": "AB12345678",
+    "OrderAmt": 260,
+    "taxAmt": 13,
+    "totalAmt": 273,
+    "orderDetail": [
+        {
+            "id": 165, 
+            "productId": 7, 
+            "qty": 1,
+            "price": 50,
+            "Amt": 50,
+        },
+        {
+            "id": 166, 
+            "productId": 21, 
+            "qty": 2,
+            "price": 60,
+            "Amt": 120,
+        },
+        {
+            "id": 168, 
+            "productId": 18, 
+            "qty": 3,
+            "price": 30,
+            "Amt": 90,
+        }
+    ]
+}
+
+
+
+{
+    "id": 50,   
+    "customerId": 3,
+    "invoiceNo": "AB12345678",
+    "OrderAmt": 320,
+    "taxAmt": 16,
+    "totalAmt": 336,
+    "orderDetail": [
+        {
+            "id": 166, 
+            "productId": 21, 
+            "qty": 3,
+            "price": 60,
+            "Amt": 180,
+        },
+        {
+            "id": 168, 
+            "productId": 18, 
+            "qty": 3,
+            "price": 30,
+            "Amt": 90,
+        },
+		{
+            "id": 0, 
+            "productId": 26, 
+            "qty": 5,
+            "price": 10,
+            "Amt": 50,
+        }
+    ]
+}
+
