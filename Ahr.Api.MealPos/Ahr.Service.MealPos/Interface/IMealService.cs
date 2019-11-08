@@ -12,6 +12,7 @@ namespace Ahr.Service.MealPos
         Task DeleteMeal(int id);
         Task<MealDto> GetMeal(int id);
         Task<IEnumerable<MealDto>> MealList();
+        Task<IEnumerable<MealDto>> MealList(string mealType);
         Task<IEnumerable<MealAddOnDto>> MealAddOnList();
         Task<List<string>> GetUnit();
         Task<List<string>> GetMealType();

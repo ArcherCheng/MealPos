@@ -45,6 +45,19 @@ namespace Ahr.Service.MealPos
                 return dtos;
             }
         }
+        public async Task<IEnumerable<MealDto>> MealList(string mealType)
+        {
+            using(var db = NewDb())
+            {
+                var list = await db.Meal
+                    .Include(x => x.MealAddOnRela)
+                    .ThenInclude(rela => rela.AddOn)
+                    .Where(x => x.MealType == mealType)
+                    .ToListAsync();
+                var dtos = _mapper.Map<IEnumerable<Meal>, IEnumerable<MealDto>>(list);
+                return dtos;
+            }
+        }
 
         public async Task<MealDto> CreateMeal(MealDto model)
         {
@@ -113,5 +126,6 @@ namespace Ahr.Service.MealPos
             var list = await base.GetAppKeyValue("MealType");
             return list.ToList();
         }
+
     }
 }

@@ -103,42 +103,30 @@ namespace Ahr.Service.MealPos
             {
                 using (var transaction = db.Database.BeginTransaction())
                 {
-                    //方法一
-                    var newIdList = model.orderDetailDtos.Select(x => x.Id).ToList();
-                    var oldIdList = db.OrderDetail.Where(x=>x.MasterId == orderId).Select(x => x.Id).ToList();
+                    ////方法一
+                    //var newIdList = model.orderDetailDtos.Select(x => x.Id).ToList();
+                    //var oldIdList = db.OrderDetail.Where(x=>x.MasterId == orderId).Select(x => x.Id).ToList();
 
-                    var deleteDetails = await db.OrderDetail
-                        .Where(x => x.MasterId == orderId && !newIdList.Contains(x.Id))
-                        .ToListAsync();
-                    if (deleteDetails.Count > 0)
-                        db.OrderDetail.RemoveRange(deleteDetails);
-
-                    var dtos = model.orderDetailDtos
-                        .Where(x => oldIdList.Contains(x.Id))
-                        .ToList();
-                    if (dtos.Count > 0)
-                    {
-                        var updateDetails = _mapper.Map<IEnumerable<OrderDetailDto>, IEnumerable<OrderDetail>>(dtos);
-                        db.OrderDetail.UpdateRange(updateDetails);
-                    }
-
-                    dtos = model.orderDetailDtos.Where(x => x.Id == 0).ToList();
-                    if (dtos.Count > 0)
-                    {
-                        var insertDetails = _mapper.Map<IEnumerable<OrderDetailDto>, IEnumerable<OrderDetail>>(dtos);
-                        db.OrderDetail.AddRange(insertDetails);
-                    }
-
-                    await db.SaveChangesAsync();
-
-                    var order = await db.OrderMaster
-                        .Include(x => x.OrderDetail)
-                        .FirstAsync(x => x.Id == orderId);
-                    order.CaculateOrderAmt();
-                    await db.SaveChangesAsync();
-
-                    transaction.Commit();
-                    return await GetOrder(orderId);
+                    //var deleteDetails = await db.OrderDetail
+                    //    .Where(x => x.MasterId == orderId && !newIdList.Contains(x.Id))
+                    //    .ToListAsync();
+                    //if (deleteDetails.Count > 0)
+                    //    db.OrderDetail.RemoveRange(deleteDetails);
+                    //var dtos = model.orderDetailDtos
+                    //    .Where(x => oldIdList.Contains(x.Id))
+                    //    .ToList();
+                    //if (dtos.Count > 0)
+                    //{
+                    //    var updateDetails = _mapper.Map<IEnumerable<OrderDetailDto>, IEnumerable<OrderDetail>>(dtos);
+                    //    db.OrderDetail.UpdateRange(updateDetails);
+                    //}
+                    //dtos = model.orderDetailDtos.Where(x => x.Id == 0).ToList();
+                    //if (dtos.Count > 0)
+                    //{
+                    //    var insertDetails = _mapper.Map<IEnumerable<OrderDetailDto>, IEnumerable<OrderDetail>>(dtos);
+                    //    db.OrderDetail.AddRange(insertDetails);
+                    //}
+                    //await db.SaveChangesAsync();
 
 
                     ////// 方法二
@@ -167,15 +155,6 @@ namespace Ahr.Service.MealPos
                     //}
                     //await db.SaveChangesAsync();
 
-                    //var order = await db.OrderMaster
-                    //    .Include(x => x.OrderDetail)
-                    //    .FirstAsync(x => x.Id == orderId);
-                    //order.CaculateOrderAmt();
-                    //await db.SaveChangesAsync();
-
-                    //transaction.Commit();
-                    //return await GetOrder(orderId);
-
 
                     ////方法三
                     ////全部刪除
@@ -186,18 +165,42 @@ namespace Ahr.Service.MealPos
                     //db.OrderDetail.AddRange(insertDetails);
                     ////存檔
                     //await db.SaveChangesAsync();
-                    ////重新計算訂單主檔金額及稅額
-                    //var order = await db.OrderMaster
-                    //    .Include(x => x.OrderDetail)
-                    //    .FirstAsync(x => x.Id == orderId);
-                    //order.CaculateOrderAmt();
-                    ////存檔
-                    //await db.SaveChangesAsync();
 
-                    //transaction.Commit();
-                    //return await GetOrder(orderId);
+                    ////方法四
+                    //在DTO物件加入一個欄位 CrudStatus,記錄每一筆明細修改的變化
+                    foreach (var dto in model.orderDetailDtos)
+                    {
+                        switch (dto.CrudStatus)
+                        {
+                            case CrudStatus.Create:
+                                var insertDetail = _mapper.Map<OrderDetailDto, OrderDetail>(dto);
+                                db.OrderDetail.Add(insertDetail);
+                                break;
+                            case CrudStatus.Update:
+                                var updateDetail = _mapper.Map<OrderDetailDto, OrderDetail>(dto);
+                                db.OrderDetail.Update(updateDetail);
+                                break;
+                            case CrudStatus.Delete:
+                                var deleteDetail = await db.OrderDetail.FindAsync(dto.Id);
+                                db.OrderDetail.Remove(deleteDetail);
+                                break;
+                            default:
+                                //no changed,none do
+                                break;
+                        }
+                    }
+                    await db.SaveChangesAsync();
+
+                    //重新計算訂單主檔金額及稅額
+                    var order = await db.OrderMaster
+                        .Include(x => x.OrderDetail)
+                        .FirstAsync(x => x.Id == orderId);
+                    order.CaculateOrderAmt();
+                    await db.SaveChangesAsync();
+                    //commit 寫入到資料庫
+                    transaction.Commit();
+                    return await GetOrder(orderId);
                 }
-
             }
         }
     }

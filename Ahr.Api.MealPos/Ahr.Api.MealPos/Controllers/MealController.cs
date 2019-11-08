@@ -11,7 +11,6 @@ namespace Ahr.Api.MealPos.Controllers
     public class MealController : ApiControllerBase
     {
         private readonly IMealService _service;
-
         public MealController(IMealService service)
         {
             this._service = service;
@@ -21,6 +20,13 @@ namespace Ahr.Api.MealPos.Controllers
         public async Task<IActionResult> GetList()
         {
             var results = await _service.MealList();
+            return Ok(results);
+        }
+
+        [HttpGet("mealType/{mealType}")]
+        public async Task<IActionResult> GetMealTypeList(string mealType)
+        {
+            var results = await _service.MealList(mealType);
             return Ok(results);
         }
 
@@ -57,6 +63,5 @@ namespace Ahr.Api.MealPos.Controllers
             await _service.DeleteMeal(id);
             return Ok(id);
         }
-
     }
 }

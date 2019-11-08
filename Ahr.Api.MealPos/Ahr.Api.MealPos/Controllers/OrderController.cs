@@ -58,5 +58,13 @@ namespace Ahr.Api.MealPos.Controllers
             await _service.DeleteOrder(id);
             return Ok(id);
         }
+
+        [HttpGet("getKey/{keyCode}")]
+        public async Task<IActionResult> GetKeyValue(string keyCode)
+        {
+            var resultList = await _service.GetAppKeyValue(keyCode);
+            return Ok(resultList);
+        }
+
     }
 }

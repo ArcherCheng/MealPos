@@ -13,10 +13,10 @@ namespace Ahr.Service.MealPos
         public DateTime OrderDate { get; set; }
         public int OrderNo { get; set; }
         public string InvoiceNo { get; set; }
-        public string CustomerTaxNo { get; set; }
-        public int OrderAmt { get; set; }
+        public string TaxId { get; set; }
         public int TaxType { get; set; }
         public int TaxRate { get; set; }
+        public int NetAmt { get; set; }
         public int TaxAmt { get; set; }
         public int TotalAmt { get; set; }
         public string Notes { get; set; }
@@ -25,7 +25,7 @@ namespace Ahr.Service.MealPos
         public ICollection<OrderDetailDto> orderDetailDtos { get; set; }
     }
 
-    public class OrderDetailDto
+    public class OrderDetailDto : BaseDto
     {
         public int Id { get; set; }
         public int MasterId { get; set; }
@@ -38,7 +38,7 @@ namespace Ahr.Service.MealPos
             get 
             {
                 return Qty * (Price + AddPrice);
-            } 
+            }
         }
     }
 }

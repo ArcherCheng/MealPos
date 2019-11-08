@@ -1,184 +1,141 @@
 ﻿{
-    "id": 0,    //一定要為零,新增才有效
+    "id": 5,
     "customerId": 1,
+    "seatNo": "a-2",
     "orderType": "1",
     "orderDate": "2019-11-03T00:00:00",
-    "autoNo": null,
-    "seatNo": "a-1",
-    "operator": null,
-    "taxType": 2,
+    "orderNo": 2,
     "invoiceNo": null,
-    "customerTaxNo": null,
-    "orderAmt": 100,
+    "taxId": null,
+    "orderAmt": 2240,
+    "taxType": 2,
     "taxRate": 5,
-    "taxAmt": 5,
-    "totalAmt": 210,
+    "taxAmt": 112,
+    "totalAmt": 2128,
     "notes": null,
+    "operator": null,
     "cookStatus": 0,
     "orderDetailDtos": [
         {
-            "id": 0, //一定要為零,新增才有效
-            "masterId": 0, //一定要為零,新增才有效
-            "mealId": 1,
-            "mealAddOnId": 0,
-            "qty": 1,
-            "price": 100,
-            "addPrice": 0,
-            "totalAmt": 100,
-            "notes": null
-        },
-        {
-            "id": 0,
-            "masterId": 0,
-            "mealId": 2,
+            "id": 29,
+            "masterId": 5,
+            "mealId": 5,
             "mealAddOnId": 1,
             "qty": 2,
             "price": 100,
             "addPrice": 5,
-            "totalAmt": 100,
-            "notes": null
+            "totalAmt": 420,
+            "crudStatus": 2
+        },
+        {
+            "id": 34,
+            "masterId": 5,
+            "mealId": 7,
+            "mealAddOnId": 1,
+            "qty": 4,
+            "price": 160,
+            "addPrice": 5,
+            "totalAmt": 660,
+            "crudStatus": 3
+        },
+        {
+            "id": 35,
+            "masterId": 5,
+            "mealId": 4,
+            "mealAddOnId": 1,
+            "qty": 4,
+            "price": 100,
+            "addPrice": 5,
+            "totalAmt": 420,
+            "crudStatus": 3
+        },
+        {
+            "id": 36,
+            "masterId": 5,
+            "mealId": 4,
+            "mealAddOnId": 1,
+            "qty": 4,
+            "price": 180,
+            "addPrice": 5,
+            "totalAmt": 740,
+            "crudStatus": 0
         },
         {
             "id": 0,
-            "masterId": 0,
-            "mealId": 3,
-            "mealAddOnId": 3,
-            "qty": 3,
-            "price": 100,
-            "addPrice": 10,
-            "totalAmt": 100,
-            "notes": null
+            "masterId": 5,
+            "mealId": 4,
+            "mealAddOnId": 1,
+            "qty": 4,
+            "price": 180,
+            "addPrice": 5,
+            "totalAmt": 740,
+            "crudStatus": 1
         }
     ]
 }
 
 
 
-
-
-
-
-
-
-
 {
-    "id": 1,
+    "id": 5,
     "customerId": 1,
-    "seatNo": "a-1",
+    "seatNo": "a-2",
     "orderType": "1",
     "orderDate": "2019-11-03T00:00:00",
-    "orderNo": 1,
-    "invoiceNo": "ab12345678",
-    "customerTaxNo": null,
-    "orderAmt": 640,
+    "orderNo": 2,
+    "invoiceNo": null,
+    "taxId": null,
+    "orderAmt": 1690,
     "taxType": 2,
     "taxRate": 5,
-    "taxAmt": 32,
-    "totalAmt": 608,
+    "taxAmt": 84,
+    "totalAmt": 1606,
     "notes": null,
     "operator": null,
     "cookStatus": 0,
     "orderDetailDtos": [
         {
-            "id": 1,
-            "masterId": 1,
-            "mealId": 1,
-            "mealAddOnId": 0,
-            "qty": 1,
+            "id": 29,
+            "masterId": 5,
+            "mealId": 5,
+            "mealAddOnId": 1,
+            "qty": 2,
             "price": 100,
-            "addPrice": 0,
-            "totalAmt": 100
-        },
-         {
-            "id": 3,
-            "masterId": 1,
-            "mealId": 2,
-            "mealAddOnId": 2,
-            "qty": 2,
-            "price": 120,
-            "addPrice": 10,
-            "totalAmt": 330
-        },
-       {
-            "id": 0,
-            "masterId": 0,
-            "mealId": 4,
-            "mealAddOnId": 4,
-            "qty": 4,
-            "price": 140,
             "addPrice": 5,
-            "totalAmt": 210
-        },
-    ]
-}
-
-
-
-
-
-{
-    "id": 50,   
-    "customerId": 3,
-    "invoiceNo": "AB12345678",
-    "OrderAmt": 260,
-    "taxAmt": 13,
-    "totalAmt": 273,
-    "orderDetail": [
-        {
-            "id": 165, 
-            "productId": 7, 
-            "qty": 1,
-            "price": 50,
-            "Amt": 50,
+            "totalAmt": 210,
+            "crudStatus": 0
         },
         {
-            "id": 166, 
-            "productId": 21, 
-            "qty": 2,
-            "price": 60,
-            "Amt": 120,
+            "id": 36,
+            "masterId": 5,
+            "mealId": 4,
+            "mealAddOnId": 1,
+            "qty": 4,
+            "price": 180,
+            "addPrice": 5,
+            "totalAmt": 740,
+            "crudStatus": 0
         },
         {
-            "id": 168, 
-            "productId": 18, 
-            "qty": 3,
-            "price": 30,
-            "Amt": 90,
+            "id": 37,
+            "masterId": 5,
+            "mealId": 4,
+            "mealAddOnId": 1,
+            "qty": 4,
+            "price": 180,
+            "addPrice": 5,
+            "totalAmt": 740,
+            "crudStatus": 0
         }
     ]
 }
 
 
 
-{
-    "id": 50,   
-    "customerId": 3,
-    "invoiceNo": "AB12345678",
-    "OrderAmt": 320,
-    "taxAmt": 16,
-    "totalAmt": 336,
-    "orderDetail": [
-        {
-            "id": 166, 
-            "productId": 21, 
-            "qty": 3,
-            "price": 60,
-            "Amt": 180,
-        },
-        {
-            "id": 168, 
-            "productId": 18, 
-            "qty": 3,
-            "price": 30,
-            "Amt": 90,
-        },
-		{
-            "id": 0, 
-            "productId": 26, 
-            "qty": 5,
-            "price": 10,
-            "Amt": 50,
-        }
-    ]
-}
+
+
+
+
+
+
 
