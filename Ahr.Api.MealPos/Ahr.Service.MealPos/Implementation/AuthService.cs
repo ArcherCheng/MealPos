@@ -8,21 +8,32 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 
 namespace Ahr.Service.MealPos
 {
     public class AuthService : AppBaseService, IAuthService
     {
-        public async Task<bool> ChangePassword(AppUser user, string oldPassword, string newPassword)
+        private readonly IMapper _mapper;
+
+        public AuthService(IMapper mapper)
         {
+            this._mapper = mapper;
+        }
+        public async Task<bool> ChangePassword(ChangePasswordDto model)
+        {
+            var user = await GetUser(model.Email, model.Phone);
+            if (user.Email != model.Email || user.Phone != model.Phone )
+                return false;
+
             using (var db = base.NewDb())
             {
                 //先判定原密碼是否正確
-                if (!PasswordHash.VerifyPasswordHash(oldPassword, user.PasswordHash, user.PasswordSalt))
+                if (!PasswordHash.VerifyPasswordHash(model.OldPassword, user.PasswordHash, user.PasswordSalt))
                     return false;
 
                 byte[] passwordHash, passwordSalt;
-                PasswordHash.CreatePasswordHash(newPassword, out passwordHash, out passwordSalt);
+                PasswordHash.CreatePasswordHash(model.NewPassword, out passwordHash, out passwordSalt);
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
                 user.WriteTime = System.DateTime.Now;
@@ -54,7 +65,7 @@ namespace Ahr.Service.MealPos
             }
         }
 
-        public async Task<AppUser> Login(string emailOrPhone, string password)
+        public async Task<UserToReturnDto> Login(string emailOrPhone, string password)
         {
             using (var db = base.NewDb())
             {
@@ -69,15 +80,19 @@ namespace Ahr.Service.MealPos
                 user.LoginDate = System.DateTime.Now;
                 db.AppUser.Update(user);
                 var saveNumber = await db.SaveChangesAsync();
-
-                return user;
+                var dto = _mapper.Map<AppUser, UserToReturnDto>(user);
+                return dto;
             }
         }
 
-        public async Task<string> NewPassword(AppUser user)
+        public async Task<string> NewPassword(ForgetPasswordDto model)
         {
             using (var db = base.NewDb())
             {
+                var user = await GetUser(model.Email, model.Phone);
+                if (user.Email != model.Email || user.Phone != model.Phone || user.UserName != model.UserName)
+                    return "";
+
                 var newPass = new System.Random();
                 var newPassword = newPass.Next(111111, 999999).ToString();
 
@@ -93,8 +108,9 @@ namespace Ahr.Service.MealPos
             }
         }
 
-        public async Task<AppUser> Register(AppUser user, string password)
+        public async Task<UserToReturnDto> Register(RegisterDto registerDto, string password)
         {
+            var user = _mapper.Map<RegisterDto, AppUser>(registerDto);
             byte[] passwordHash, passwordSalt;
             PasswordHash.CreatePasswordHash(password, out passwordHash, out passwordSalt);
             user.PasswordHash = passwordHash;
@@ -106,9 +122,8 @@ namespace Ahr.Service.MealPos
             {
                 db.AppUser.Add(user);
                 var saveNumber = await db.SaveChangesAsync();
-                return user;
+                return _mapper.Map<AppUser,UserToReturnDto>(user);
             }
-
         }
 
         public async Task<bool> UserIsExists(string userEmail, string userPhone)

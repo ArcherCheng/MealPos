@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Ahr.Data.MealPos;
 using Ahr.Service.MealPos;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -35,9 +34,7 @@ namespace Ahr.Api.MealPos.Controllers
             if (await _service.UserIsExists(model.Email, model.Phone))
                 return BadRequest("此電子郵件或電話已經是會員了");
 
-            var user = _mapper.Map<AppUser>(model);
-            user = await _service.Register(user, model.password);
-            var userToReturn = _mapper.Map<UserToReturnDto>(user);
+            var userToReturn = await _service.Register(model, model.password);
             return Ok(userToReturn);
  
             //重新導向使用者資料編輯
@@ -50,8 +47,8 @@ namespace Ahr.Api.MealPos.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await _service.Login(model.Username, model.Password);
-            if (user == null)
+            var userToReturn = await _service.Login(model.Username, model.Password);
+            if (userToReturn == null)
                 return Unauthorized();
 
             var tokenKey = _config.GetSection("AppSettings:Token").Value;
@@ -61,9 +58,9 @@ namespace Ahr.Api.MealPos.Controllers
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name,user.UserName),
-                new Claim(ClaimTypes.Role,user.UserRole ?? "users" )
+                new Claim(ClaimTypes.NameIdentifier, userToReturn.Id.ToString()),
+                new Claim(ClaimTypes.Name,userToReturn.UserName),
+                new Claim(ClaimTypes.Role,userToReturn.UserRole ?? "users" )
             };
 
             var tokenDescripter = new SecurityTokenDescriptor
@@ -76,21 +73,11 @@ namespace Ahr.Api.MealPos.Controllers
             var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescripter);
 
-            //返回簡單使用者資料
-            var userToReturn = _mapper.Map<UserToReturnDto>(user);
             return Ok(new
             {
                 tokenToReturn = tokenHandler.WriteToken(token),
                 userToReturn
             });
-
-            //var tokenToReturn = UserLoginToken(member, tokenSecretKey);
-            //var userToReturn = _mapper.Map<UserToReturnDto>(member);
-            //return Ok(new
-            //{
-            //    tokenToReturn,
-            //    userToReturn
-            //});
         }
 
         [HttpPost("forgetPassword")]
@@ -99,11 +86,9 @@ namespace Ahr.Api.MealPos.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var member = await _service.GetUser(model.Email, model.Phone);
-            if (member.Email != model.Email || member.Phone != model.Phone || member.UserName != model.UserName)
+            var newPassword = await _service.NewPassword(model);
+            if(newPassword == "")
                 return BadRequest("資枓比對不一致,請重新輸入");
-
-            var newPassword = await _service.NewPassword(member);
 
             return Ok(newPassword);
         }
@@ -114,42 +99,36 @@ namespace Ahr.Api.MealPos.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await _service.GetUser(model.Email, model.Phone);
-
-            if (user.Email != model.Email || user.Phone != model.Phone)
-                return BadRequest("電話或電子郵件輸入錯誤,請重新輸入");
-
-            var isChanged = await _service.ChangePassword(user, model.OldPassword, model.NewPassword);
-
+            var isChanged = await _service.ChangePassword(model);
             if (!isChanged)
                 BadRequest("原密碼輸入錯誤,請重新輸入");
 
             return Ok();
         }
 
-        private string UserLoginToken(AppUser user, string tokenSecretKey)
-        {
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(tokenSecretKey));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+        //private string UserLoginToken(UserToReturnDto user, string tokenSecretKey)
+        //{
+        //    var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(tokenSecretKey));
+        //    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name,user.UserName),
-                new Claim(ClaimTypes.Role,user.UserRole ?? "users" )
-            };
+        //    var claims = new[]
+        //    {
+        //        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        //        new Claim(ClaimTypes.Name,user.UserName),
+        //        new Claim(ClaimTypes.Role,user.UserRole ?? "users" )
+        //    };
 
-            var tokenDescripter = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = System.DateTime.Now.AddDays(30),
-                SigningCredentials = creds
-            };
+        //    var tokenDescripter = new SecurityTokenDescriptor
+        //    {
+        //        Subject = new ClaimsIdentity(claims),
+        //        Expires = System.DateTime.Now.AddDays(30),
+        //        SigningCredentials = creds
+        //    };
 
-            var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescripter);
-            var tokenResult = tokenHandler.WriteToken(token);
-            return tokenResult;
-        }
+        //    var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+        //    var token = tokenHandler.CreateToken(tokenDescripter);
+        //    var tokenResult = tokenHandler.WriteToken(token);
+        //    return tokenResult;
+        //}
     }
 }

@@ -1,23 +1,15 @@
-﻿using Ahr.Psi.Domain.Entitys;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 
 namespace Ahr.Data.MealPos
 {
-    //public class KtCustomerConfiguration: EntityTypeConfiguration<Customer>
-    //{
-    //    public KtCustomerConfiguration()
-    //    {
-    //        this.ToTable("KtCustomer");
-
-    //        this.HasKey(p => p.EntityId).
-    //             Property(p => p.EntityId).
-    //             HasColumnName("Id");
-
-    //        this.Property(x => x.CustomerName).IsRequired();
-    //    }
-    //}
+    public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
+    {
+        public void Configure(EntityTypeBuilder<Customer> builder)
+        {
+            builder.Property(t => t.Name)
+                .IsRequired();
+        }
+    }
 }

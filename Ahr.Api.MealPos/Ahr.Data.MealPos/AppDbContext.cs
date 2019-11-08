@@ -10,8 +10,8 @@ namespace Ahr.Data.MealPos
     {
         //public static readonly ILoggerFactory loggerFactory = new LoggerFactory().AddConsole((_, ___) => true);
 
-        public static readonly ILoggerFactory loggerFactory =
-            new LoggerFactory(new[] { new ConsoleLoggerProvider((_, __) => true, true) });
+        //public static readonly ILoggerFactory loggerFactory =
+        //    new LoggerFactory(new[] { new ConsoleLoggerProvider((_, __) => true, true) });
 
         public AppDbContext()
         {
@@ -27,8 +27,8 @@ namespace Ahr.Data.MealPos
             if (!optionsBuilder.IsConfigured)
             {
                optionsBuilder
-                    .UseLoggerFactory(loggerFactory)  //tie-up DbContext with LoggerFactory object
-                    .EnableSensitiveDataLogging()
+                    //.UseLoggerFactory(loggerFactory)  //tie-up DbContext with LoggerFactory object
+                    //.EnableSensitiveDataLogging()
                     .UseSqlServer("server=.\\sqlExpress;database=MealPos2;trusted_connection=true");
             }
         }
@@ -46,6 +46,9 @@ namespace Ahr.Data.MealPos
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //base.OnModelCreating(modelBuilder);
+            //modelBuilder.ApplyAllConfigurationsFromCurrentAssembly();
+
             modelBuilder.Entity<AppDataLog>(entity =>
             {
                 entity.Property(e => e.TableName)
