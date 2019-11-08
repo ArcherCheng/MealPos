@@ -59,11 +59,15 @@ namespace Ahr.Data.MealPos
 
             modelBuilder.Entity<AppKeyValue>(entity =>
             {
-                entity.Property(e => e.KeyGroup)
+                entity.Property(e => e.AppGroup)
                     .IsRequired()
                     .HasMaxLength(30);
 
-                entity.Property(e => e.KeyValue)
+                entity.Property(e => e.AppKey)
+                    .IsRequired()
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.AppValue)
                     .IsRequired()
                     .HasMaxLength(30);
 

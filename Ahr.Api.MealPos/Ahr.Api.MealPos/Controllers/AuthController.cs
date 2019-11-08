@@ -12,7 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Ahr.Api.MealPos.Controllers
 {
-    public class AuthController : ApiControllerBase
+    public class AuthController : AppControllerBase
     {
         private readonly IMapper _mapper;
         private readonly IAuthService _service;

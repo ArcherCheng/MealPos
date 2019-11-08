@@ -102,13 +102,19 @@ namespace Ahr.Service.MealPos
             }
         }
 
-        public async Task<IEnumerable<string>> GetAppKeyValue(string keyGroup)
+        public async Task<IEnumerable<AppKeyValueDto>> GetAppKeyValue(string appGroup)
         {
             using (var db = new AppDbContext())
             {
                 var result = await db.AppKeyValue
-                    .Where(x => x.KeyGroup.ToUpper() == keyGroup.ToUpper())
-                    .Select(x => x.KeyValue)
+                    .Where(x => x.AppGroup.ToUpper() == appGroup.ToUpper())
+                    .OrderBy(x => x.AppSort)
+                    .Select(x => new AppKeyValueDto
+                    {
+                        AppGroup = x.AppGroup,
+                        AppKey = x.AppKey,
+                        AppValue = x.AppValue
+                    })
                     .ToListAsync();
                 return result;
             }

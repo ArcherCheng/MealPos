@@ -115,17 +115,5 @@ namespace Ahr.Service.MealPos
             }
         }
 
-        public async Task<List<string>> GetUnit()
-        {
-            var list = await base.GetAppKeyValue("Unit");
-            return list.ToList();
-        }
-
-        public async Task<List<string>> GetMealType()
-        {
-            var list = await base.GetAppKeyValue("MealType");
-            return list.ToList();
-        }
-
     }
 }

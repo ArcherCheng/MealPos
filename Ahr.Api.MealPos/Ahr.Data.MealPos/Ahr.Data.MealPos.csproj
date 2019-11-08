@@ -21,10 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Configuration\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Ahr.Infra.MealPos\Ahr.Infra.MealPos.csproj" />
   </ItemGroup>
 

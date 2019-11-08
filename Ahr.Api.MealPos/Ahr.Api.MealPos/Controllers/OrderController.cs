@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Ahr.Api.MealPos.Controllers
 {
   
-    public class OrderController : ApiControllerBase
+    public class OrderController : AppControllerBase
     {
         private readonly IOrderService _service;
 
@@ -59,12 +59,7 @@ namespace Ahr.Api.MealPos.Controllers
             return Ok(id);
         }
 
-        [HttpGet("getKey/{keyCode}")]
-        public async Task<IActionResult> GetKeyValue(string keyCode)
-        {
-            var resultList = await _service.GetAppKeyValue(keyCode);
-            return Ok(resultList);
-        }
+ 
 
     }
 }

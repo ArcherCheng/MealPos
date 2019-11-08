@@ -13,7 +13,6 @@ namespace Ahr.Service.MealPos
         Task<OrderDto> GetOrder(int id);
         Task<IEnumerable<OrderDto>> OrderList();
         Task<int> GetMaxOrderNo(DateTime orderDate, string orderType);
-        Task<List<string>> GetOrderType();
-        Task<List<string>> GetSeat();
+ 
     }
 }

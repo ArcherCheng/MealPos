@@ -11,6 +11,7 @@ namespace Ahr.Service.MealPos
         public AutoMapperProfiles()
         {
             //CreateMap<TSource, TDestination>
+            CreateMap<AppKeyValue, AppKeyValueDto>();
             CreateMap<AppUser, UserListDto>().ReverseMap();
             CreateMap<RegisterDto, AppUser>();
             CreateMap<AppUser, UserToReturnDto>();

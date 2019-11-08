@@ -30,7 +30,7 @@ namespace Ahr.Data.MealPos
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("server=.\\sqlExpress;database=MealPos2;trusted_connection=true");
             }
         }
@@ -50,11 +50,15 @@ namespace Ahr.Data.MealPos
 
             modelBuilder.Entity<AppKeyValue>(entity =>
             {
-                entity.Property(e => e.KeyGroup)
+                entity.Property(e => e.AppGroup)
+                       .IsRequired()
+                       .HasMaxLength(30);
+
+                entity.Property(e => e.AppKey)
                     .IsRequired()
                     .HasMaxLength(30);
 
-                entity.Property(e => e.KeyValue)
+                entity.Property(e => e.AppValue)
                     .IsRequired()
                     .HasMaxLength(30);
 

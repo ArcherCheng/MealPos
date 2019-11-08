@@ -75,17 +75,6 @@ namespace Ahr.Service.MealPos
             }
         }
 
-        public async Task<List<string>> GetOrderType()
-        {
-            var result = await base.GetAppKeyValue("OrderType");
-            return result.ToList();
-        }
-
-        public async Task<List<string>> GetSeat()
-        {
-            var result = await base.GetAppKeyValue("OrderType");
-            return result.ToList();
-        }
 
         public async Task<IEnumerable<OrderDto>> OrderList()
         {
