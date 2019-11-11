@@ -8,11 +8,6 @@ namespace Ahr.Data.MealPos
 {
     public partial class AppDbContext : DbContext
     {
-        //public static readonly ILoggerFactory loggerFactory = new LoggerFactory().AddConsole((_, ___) => true);
-
-        //public static readonly ILoggerFactory loggerFactory =
-        //    new LoggerFactory(new[] { new ConsoleLoggerProvider((_, __) => true, true) });
-
         public AppDbContext()
         {
         }
@@ -26,10 +21,12 @@ namespace Ahr.Data.MealPos
         {
             if (!optionsBuilder.IsConfigured)
             {
-               optionsBuilder
+                string connString = AppSettingsHelper.Configuration["ConnectionStrings:DefaultConnection"];
+                //var connString = AppSettingsHelper.Configuration.GetSection("ConnectionStrings").GetSection("DefaultConnection");
+                optionsBuilder.UseSqlServer(connString);
                     //.UseLoggerFactory(loggerFactory)  //tie-up DbContext with LoggerFactory object
                     //.EnableSensitiveDataLogging()
-                    .UseSqlServer("server=.\\sqlExpress;database=MealPos2;trusted_connection=true");
+                    //.UseSqlServer("server=.\\sqlExpress;database=MealPos2;trusted_connection=true");
             }
         }
 
