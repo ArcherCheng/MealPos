@@ -9,16 +9,16 @@ namespace Ahr
 {
     public class PageList<T> : List<T>
     {
-        public int PageCurrent { get; set; }
+        public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public int TotalCount { get; set; }
         public int TotalPages { get; set; }
 
-        public PageList(List<T> items, int count, int pageCurrent, int pageSize)
+        public PageList(List<T> items, int count, int pageNumber, int pageSize)
         {
             TotalCount = count;
             PageSize = pageSize;
-            PageCurrent = pageCurrent;
+            PageNumber = pageNumber;
             TotalPages = (int)System.Math.Ceiling(count / (double)pageSize);
             this.AddRange(items);
         }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Ahr.Service.MealPos
 {
-    public class MealService : AppBaseService, IMealService
+    public class MealService : BaseService, IMealService
     {
         private readonly IMapper _mapper;
 

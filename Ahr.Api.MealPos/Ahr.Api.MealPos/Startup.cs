@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Ahr.Data.MealPos;
+using Ahr.Service;
 using Ahr.Service.MealPos;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,26 +38,30 @@ namespace Ahr.Api.MealPos
 
             //services.AddScoped<DbContext, AppDbContext>();
 
+            //services.AddDefaultIdentity<IdentityUser> (options => options.SignIn.RequireConfirmedAccount = true)
+            //    .AddRoles<IdentityRole>()
+            //    .AddEntityFrameworkStores<AppDbContext>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonOptions(opt => {
                     opt.SerializerSettings.ReferenceLoopHandling =
                     Newtonsoft.Json.ReferenceLoopHandling.Ignore;  //避免無限參考循環問題
                 });
             services.AddCors();
-            services.AddAuthentication(Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options => {
-                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
-                            System.Text.Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-                });
+            //services.AddAuthentication(Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)
+            //    .AddJwtBearer(options => {
+            //        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+            //        {
+            //            ValidateIssuerSigningKey = true,
+            //            IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
+            //                System.Text.Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+            //            ValidateIssuer = false,
+            //            ValidateAudience = false
+            //        };
+            //    });
 
             //以下為自行定義的外部服務
-            Ioc.RegisterInheritedTypes(typeof(AppBaseService).Assembly, typeof(AppBaseService));
+            Ioc.RegisterInheritedTypes(typeof(BaseService).Assembly, typeof(BaseService));
 
             var configuration = new AutoMapper.MapperConfiguration(cfg =>
             {

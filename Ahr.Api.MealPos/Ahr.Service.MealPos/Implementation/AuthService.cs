@@ -12,7 +12,7 @@ using AutoMapper;
 
 namespace Ahr.Service.MealPos
 {
-    public class AuthService : AppBaseService, IAuthService
+    public class AuthService : BaseService, IAuthService
     {
         private readonly IMapper _mapper;
 

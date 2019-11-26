@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ahr
+namespace Ahr.Data
 {
     public interface IBaseEntity
     {

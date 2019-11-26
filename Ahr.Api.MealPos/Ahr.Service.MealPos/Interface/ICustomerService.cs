@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Ahr.Service.MealPos
 {
-    public interface ICustomerService : IAppBaseService
+    public interface ICustomerService : IBaseService
     {
         Task<CustomerDto> CreateCustomer(CustomerDto model);
         Task<CustomerDto> UpdateCustomer(int id, CustomerDto model);

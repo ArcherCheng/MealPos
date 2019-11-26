@@ -12,7 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Ahr.Api.MealPos.Controllers
 {
     //[Authorize]
-    public class CustomerController : AppControllerBase
+    [Route("api/[controller]")]
+    public class CustomerController : ApiControllerBase
     {
         private readonly ICustomerService _service;
         //private readonly IMapper _mapper;

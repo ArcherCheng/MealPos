@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Ahr.Service.MealPos
 {
-    public interface IOrderService : IAppBaseService
+    public interface IOrderService : IBaseService
     {
         Task<OrderDto> CreateOrder(OrderDto model);
         Task<OrderDto> UpdateOrder(int id, OrderDto model);

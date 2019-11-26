@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ahr.Service.MealPos
 {
-    public interface IAuthService : IAppBaseService
+    public interface IAuthService : IBaseService
     {
         Task<UserToReturnDto> Register(RegisterDto user, string password);
         Task<UserToReturnDto> Login(string userEmail, string password);

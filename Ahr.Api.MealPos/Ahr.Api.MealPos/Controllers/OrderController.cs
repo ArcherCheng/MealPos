@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Ahr.Api.MealPos.Controllers
 {
   
-    public class OrderController : AppControllerBase
+    public class OrderController : ApiControllerBase
     {
         private readonly IOrderService _service;
 

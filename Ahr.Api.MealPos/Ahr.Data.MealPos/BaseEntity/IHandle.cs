@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ahr
+namespace Ahr.Data
 {
-    public interface IHandle<T> where T:BaseDomainEvent
+    public interface IHandle<T> where T : BaseDomainEvent
     {
         void Handle(T domainEvent);
     }

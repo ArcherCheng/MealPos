@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ahr.Api.MealPos.Controllers
 {
-    public class MealController : AppControllerBase
+    public class MealController : ApiControllerBase
     {
         private readonly IMealService _service;
         public MealController(IMealService service)

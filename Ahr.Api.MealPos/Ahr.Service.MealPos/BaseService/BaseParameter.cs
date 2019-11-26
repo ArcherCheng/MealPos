@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ahr.Service.MealPos
+namespace Ahr.Service
 {
     public class BaseParameter
     {

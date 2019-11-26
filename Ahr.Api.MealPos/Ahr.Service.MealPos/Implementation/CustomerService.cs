@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Ahr.Service.MealPos
 {
-    public class CustomerService : AppBaseService, ICustomerService
+    public class CustomerService : BaseService, ICustomerService
     {
         private readonly IMapper _mapper;
 
@@ -35,6 +35,8 @@ namespace Ahr.Service.MealPos
             {
                 var customers = await db.Customer.ToListAsync();
                 var dtos = _mapper.Map<IEnumerable<CustomerDto>>(customers);
+                var service = services.GetService<IMapper>();
+                var order = await service.OrderList();
                 return dtos;
             }
         }

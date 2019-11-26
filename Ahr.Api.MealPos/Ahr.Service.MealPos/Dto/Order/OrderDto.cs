@@ -25,7 +25,7 @@ namespace Ahr.Service.MealPos
         public ICollection<OrderDetailDto> orderDetailDtos { get; set; }
     }
 
-    public class OrderDetailDto : BaseDto
+    public class OrderDetailDto : CrudStatusDto
     {
         public int Id { get; set; }
         public int MasterId { get; set; }

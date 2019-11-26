@@ -1,11 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Ahr.Service.MealPos;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Ahr.Service.MealPos
 {
-    public static class AppServicesRegisters
+    public static class IServiceCollectionRegister
     {
         public static IServiceCollection AppServiceRegister(this IServiceCollection services)
         {

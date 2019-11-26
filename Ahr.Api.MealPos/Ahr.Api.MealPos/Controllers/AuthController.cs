@@ -11,7 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Ahr.Api.MealPos.Controllers
 {
-    public class AuthController : AppControllerBase
+    public class AuthController : ApiControllerBase
     {
         private readonly IMapper _mapper;
         private readonly IAuthService _service;
@@ -51,7 +51,9 @@ namespace Ahr.Api.MealPos.Controllers
             if (userToReturn == null)
                 return Unauthorized();
 
-            var tokenKey = _config.GetSection("AppSettings:Token").Value;
+            var tokenKey = _config.GetSection("AppTokens:Token").Value;
+            //var tokenKey = AppSettingsHelper.Configuration["AppTokens:Token"];
+            //var tikenkey = AppSettingsHelper.Configuration.GetSection("AppTokens").GetSection("Token").Value;
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(tokenKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);

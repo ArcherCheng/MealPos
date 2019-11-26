@@ -3,13 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29409.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ahr.Api.MealPos", "Ahr.Api.MealPos\Ahr.Api.MealPos.csproj", "{5C210351-78E2-4B92-BD47-6AB675FD06C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ahr.Api.MealPos", "Ahr.Api.MealPos\Ahr.Api.MealPos.csproj", "{5C210351-78E2-4B92-BD47-6AB675FD06C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ahr.Infra.MealPos", "Ahr.Infra.MealPos\Ahr.Infra.MealPos.csproj", "{94A854B6-3B42-4E6E-85AE-345BA11EFF29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ahr.CrossCutting", "Ahr.CrossCutting\Ahr.CrossCutting.csproj", "{94A854B6-3B42-4E6E-85AE-345BA11EFF29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ahr.Data.MealPos", "Ahr.Data.MealPos\Ahr.Data.MealPos.csproj", "{10AE87A1-6DF7-4823-93B4-5A9126D42DA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ahr.Data.MealPos", "Ahr.Data.MealPos\Ahr.Data.MealPos.csproj", "{10AE87A1-6DF7-4823-93B4-5A9126D42DA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ahr.Service.MealPos", "Ahr.Service.MealPos\Ahr.Service.MealPos.csproj", "{2A880AE0-C8CF-4778-B686-ADE3901096FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ahr.Service.MealPos", "Ahr.Service.MealPos\Ahr.Service.MealPos.csproj", "{2A880AE0-C8CF-4778-B686-ADE3901096FB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-Api", "1-Api", "{2C6B0C42-5380-4F61-9C32-DF50DE7E9FB1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2-Service", "2-Service", "{8EA6E63F-4053-4779-B07D-C9DB7555ACB9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-DataBase", "3-DataBase", "{4221543D-5583-44E0-A320-7F779602D770}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "A-CrossCutting", "A-CrossCutting", "{DF088FD2-068C-4EC9-A95C-BE81E425421D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +44,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5C210351-78E2-4B92-BD47-6AB675FD06C4} = {2C6B0C42-5380-4F61-9C32-DF50DE7E9FB1}
+		{94A854B6-3B42-4E6E-85AE-345BA11EFF29} = {DF088FD2-068C-4EC9-A95C-BE81E425421D}
+		{10AE87A1-6DF7-4823-93B4-5A9126D42DA0} = {4221543D-5583-44E0-A320-7F779602D770}
+		{2A880AE0-C8CF-4778-B686-ADE3901096FB} = {8EA6E63F-4053-4779-B07D-C9DB7555ACB9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {44433AA4-DE62-476E-80A6-96E79DC329F1}

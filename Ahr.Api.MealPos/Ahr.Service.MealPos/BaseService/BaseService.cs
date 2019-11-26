@@ -1,16 +1,20 @@
-﻿using System;
+﻿using Ahr.Data;
+using Ahr.Data.MealPos;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ahr
+namespace Ahr.Service
 {
-    public class BaseService  //: IBaseService
+    public class BaseService  : IBaseService
     {
-        //protected AppDbContext NewDb()
-        //{
-        //    return new AppDbContext();
-        //}
+        protected AppDbContext NewDb()
+        {
+            return new AppDbContext();
+        }
 
         //public async Task<T> AddAsync<T>(T entity) where T : BaseEntity
         //{
@@ -25,7 +29,7 @@ namespace Ahr
 
         //public async Task DeleteAsync<T>(T entity) where T : BaseEntity
         //{
-        //    using (var db = new AppDbContext())
+        //    using (var db = NewDb())
         //    {
         //        ////db.Remove(entity);
         //        //db.Set<T>().Remove(entity);
@@ -44,7 +48,7 @@ namespace Ahr
 
         //public async Task UpdateAsync<T>(T entity) where T : BaseEntity
         //{
-        //    using (var db = new AppDbContext())
+        //    using (var db = NewDb())
         //    {
         //        //db.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
         //        //db.SaveChangesAsync();
@@ -61,7 +65,7 @@ namespace Ahr
 
         //public T GetById<T>(int id) where T : BaseEntity
         //{
-        //    using (var db = new AppDbContext())
+        //    using (var db = NewDb())
         //    {
         //        //var Set = db.Set<T>();
         //        //var TResult = Set.Find(id);
@@ -72,7 +76,7 @@ namespace Ahr
 
         //public async Task<T> GetByIdAsync<T>(int id) where T : BaseEntity
         //{
-        //    using (var db = new AppDbContext())
+        //    using (var db = NewDb())
         //    {
         //        //var Set = db.Set<T>();
         //        //var TResult = Set.FindAsync(id);
@@ -83,7 +87,7 @@ namespace Ahr
 
         //public List<T> GetList<T>() where T : BaseEntity
         //{
-        //    using (var db = new AppDbContext())
+        //    using (var db = NewDb())
         //    {
         //        var result = db.Set<T>().ToList();
         //        return result;
@@ -92,11 +96,29 @@ namespace Ahr
 
         //public async Task<List<T>> GetListAsync<T>() where T : BaseEntity
         //{
-        //    using (var db = new AppDbContext())
+        //    using (var db = NewDb())
         //    {
         //        var result = await db.Set<T>().ToListAsync();
         //        return result;
         //    }
         //}
+
+        public async Task<IEnumerable<AppKeyValueDto>> GetAppKeyValue(string appGroup)
+        {
+            using (var db = NewDb())
+            {
+                var result = await db.AppKeyValue
+                    .Where(x => x.AppGroup.ToUpper() == appGroup.ToUpper())
+                    .OrderBy(x => x.AppSort)
+                    .Select(x => new AppKeyValueDto
+                    {
+                        AppGroup = x.AppGroup,
+                        AppKey = x.AppKey,
+                        AppValue = x.AppValue
+                    })
+                    .ToListAsync();
+                return result;
+            }
+        }
     }
 }
